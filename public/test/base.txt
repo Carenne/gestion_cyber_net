@@ -1,0 +1,9 @@
+CREATE TABLE wifi ( id INT AUTO_INCREMENT PRIMARY KEY, heure_demarrage TIME NOT NULL, heure_fin TIME NOT NULL, temps INT NOT NULL, -- durée en minutes (ou heures) prix DECIMAL(10,2) NOT NULL, montant_limite DECIMAL(10,2) DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, date_enregistrement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, lieu_travail VARCHAR(100) NOT NULL, nom_gerant VARCHAR(100) NOT NULL );
+
+CREATE EVENT IF NOT EXISTS increment_wifi
+ON SCHEDULE EVERY 1 MINUTE
+DO
+    UPDATE wifi
+    SET temps = temps + 1,
+        prix = temps * 30
+    WHERE heure_fin = heure_demarrage;

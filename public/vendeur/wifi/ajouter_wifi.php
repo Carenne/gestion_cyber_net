@@ -16,14 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-//$montant_limite = 02;
 $montant_limite = isset($_POST['montant_limite']) ? (float)$_POST['montant_limite'] : 0;
-//$commentaire    = 'sss';
 $commentaire    = trim($_POST['commentaire'] ?? '');
-$lieu_travail   = htmlspecialchars($pv ?? '');
+$lieu_travail   = $_SESSION['user']['point_of_sale'] ?? '';
 //$lieu_travail   = 'f';
 $nom_gerant     = htmlspecialchars($_SESSION['user']['username'] ?? 'inconnu');
-//$nom_gerant     = 'f';
+
 
 if ($lieu_travail === '') {
     echo json_encode(['success'=>false,'error'=>'pointVente manquant']);
@@ -32,7 +30,7 @@ if ($lieu_travail === '') {
 
 $stmt = $pdo->prepare("
     INSERT INTO wifi (heure_demarrage, heure_fin, temps, prix, montant_limite, commentaire, lieu_travail, nom_vendeur)
-    VALUES (CURRENT_TIME, NULL, 0, 0, :lim, :com, :lieu, :gerant)
+    VALUES (CURRENT_TIME, CURRENT_TIME, 0, 0, :lim, :com, :lieu, :gerant)
 ");
 $stmt->execute([
     'lim'   => $montant_limite,
