@@ -1,9 +1,61 @@
 CREATE TABLE wifi ( id INT AUTO_INCREMENT PRIMARY KEY, heure_demarrage TIME NOT NULL, heure_fin TIME NOT NULL, temps INT NOT NULL, -- durée en minutes (ou heures) prix DECIMAL(10,2) NOT NULL, montant_limite DECIMAL(10,2) DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, date_enregistrement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, lieu_travail VARCHAR(100) NOT NULL, nom_gerant VARCHAR(100) NOT NULL );
 
-CREATE EVENT IF NOT EXISTS increment_wifi
+DROP EVENT IF EXISTS increment_wifi;
+
+DELIMITER $$
+
+CREATE EVENT increment_wifi
 ON SCHEDULE EVERY 1 MINUTE
 DO
+BEGIN
     UPDATE wifi
-    SET temps = temps + 1,
-        prix = temps * 30
+    SET 
+        temps = temps + 1,
+        prix = CASE
+            -- Temps ≤ 8
+            WHEN temps + 1 <= 8 THEN 200
+            -- Temps entre 9 et 12
+            WHEN temps + 1 BETWEEN 9 AND 12 THEN 300
+            -- Temps ≤ 240 mais prix calculé >= 5000
+            WHEN temps + 1 <= 240 AND (temps + 1) * 25 >= 5000 THEN 5000
+            -- Temps > 240
+            WHEN temps + 1 > 240 THEN LEAST((temps + 1 - 240) * 15 + 5000, 7000)
+            -- Sinon, arrondi au chiffre des centaines
+            ELSE
+                CASE
+                    WHEN ((temps + 1) * 25) % 100 = 0 THEN (temps + 1) * 25
+                    ELSE (FLOOR((temps + 1) * 25 / 100) + 1) * 100
+                END
+        END
     WHERE heure_fin = heure_demarrage;
+END $$
+
+DELIMITER ;
+
+
+
+
+
+
+Poste
+Wifi/Cable
+Impression/Photocopie/scan (manasa sary ...)
+Reliure
+Marchandise (Envellope ...)
+Email (Envoi/reçois)
+
+Film 33.33%
+Saisie 33.33%
+Application 50%
+Mise a jour 33.33%
+Installation systeme 33.33%
+Autre 50%
+
+
+
+Mouvement d'argent
+
+    niditra 
+    nivoka
+    font de caisse
+    trosa

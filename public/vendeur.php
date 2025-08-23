@@ -106,7 +106,7 @@ require __DIR__ . '/../inc/db.php';
                 <span id="profileIcon" class="bi bi-person-circle" style="font-size:24px; cursor:pointer;" data-bs-toggle="dropdown"></span>
                 <ul class="dropdown-menu dropdown-menu-end p-2" aria-labelledby="profileIcon" style="min-width:250px;">
                     <li class="text-center">
-                        <img src="avatar.jpg" alt="Avatar" class="rounded-circle mb-2" width="50" height="50">
+                      
                         <div><strong><?= htmlspecialchars($_SESSION['user']['username']) ?></strong></div>
                        
                         <div class="mt-2 badge bg-secondary"><?= $pv ?></div>
@@ -115,6 +115,16 @@ require __DIR__ . '/../inc/db.php';
                     <li>
                         <a class="dropdown-item" href="settings.php">
                             <i class="bi bi-gear"></i> Gestion de Bonus
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="mouvement_argent.php">
+                            <i class="bi bi-gear"></i> Mouvement Argent
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="settings.php">
+                            <i class="bi bi-gear"></i> Tarif
                         </a>
                     </li>
                     <li>
@@ -132,23 +142,38 @@ require __DIR__ . '/../inc/db.php';
       <!-- Boutons onglets -->
       <div class="d-flex">
           <button class="tab-btn active" data-tab="note">NOTE VERSEMENT</button>
-          <button class="tab-btn" data-tab="poste">CONTROLE POSTE</button>
+        
           <button class="tab-btn" data-tab="wifi">CONTROLE WIFI</button>
       </div>
 
       <!-- Contenus -->
      <?php include 'vendeur/note.php'; ?>
 
-      <div id="poste" class="content-section">
-          <h4>POSTE AFFICHAGE</h4>
-          <p>Contenu des postes ici...</p>
-      </div>
+  
       <div id="wifi" class="content-section">
              <?php include 'vendeur/wifi.php'; ?>
       </div>
     </div>
 
  <script>
+
+        function loadTotal() {
+            $.post("vendeur/paiement/total_paiement.php", { pointVente: "<?= $pointVente ?>" }, function (res) {
+                let total = res.total || 0;
+
+                 // Met à jour le <tfoot>
+                $('#totalCell').text(total.toLocaleString('fr-FR') + ' Ar');
+
+                // Met à jour le bouton
+                $('#btnTotal').html("<h2>TOTAL VERSEMENT : " + total.toLocaleString('fr-FR') + " Ar</h2>");
+                }, 'json');
+        }
+
+            $(document).ready(function() {
+                // Charger total dès le départ
+                    loadTotal();
+            });
+                            
         const buttons = document.querySelectorAll('.tab-btn');
         const sections = document.querySelectorAll('.content-section');
 
@@ -182,6 +207,7 @@ require __DIR__ . '/../inc/db.php';
                     if (response.success) {
                         $("tr[data-id='" + paiementId + "']").remove();
                         $("#modalSuppression").modal("hide");
+                        loadTotal();
                     } else {
                         $("#erreurSuppression").text(response.message);
                     }
@@ -217,6 +243,7 @@ require __DIR__ . '/../inc/db.php';
                         row.find("td:eq(2)").text(commentaire);
 
                         $("#modalModification").modal("hide");
+                        loadTotal();
                     } else {
                         $("#erreurModification").text(response.message);
                     }
@@ -256,7 +283,7 @@ require __DIR__ . '/../inc/db.php';
                             <td>${item.heure_fin}</td>
                             <td>${item.temps} min</td>
                             <td>${item.prix} Ar</td>
-                            <td>${item.montant_limite ?? ''}</td>
+                            <td>${item.montant_limite ?? ''} Ar</td>
                             <td>${item.commentaire ?? ''}</td>
                             <td>
                                 <button class="btn btn-sm btn-warning" 

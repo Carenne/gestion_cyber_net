@@ -2,7 +2,9 @@
       <div id="note" class="content-section active">
             <?php
                 // Récupération des paiements
-              $pointVente = htmlspecialchars($pv); // Remplace par la valeur réelle
+              $pointVente = htmlspecialchars($pv);
+              
+              // Remplace par la valeur réelle
 
                 $stmt = $pdo->prepare("
                     SELECT * 
@@ -23,46 +25,49 @@
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                       <!-- <table class="table table-striped mb-0">-->
-                         <table id="myTable" class="table table-striped table-bordered table-hover" style="width:100%">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Montant</th>
-                                    <th>Type</th>
-                                    <th>Commentaire</th>
-                                    <th>Vendeur</th>
-                                    <th>Heure</th>
-                                    <th>Contrôle</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                <?php
-                                    if (!empty($paiements)): 
-                                ?>
-                                    <?php foreach ($paiements as $p): 
-                                    ?>
-                                       <tr data-id="<?= $p['id'] ?>">
-                                            <td><?= htmlspecialchars($p['montant']) ?></td>
-                                            <td><?= htmlspecialchars($p['type_service']) ?></td>
-                                            <td><?= htmlspecialchars($p['commentaire']) ?></td>
-                                            <td><?= htmlspecialchars($p['nom_vendeur']) ?></td>
-                                            <td><?= htmlspecialchars($p['date_heure_paiement']) ?></td>
-                                            <td>
-                                                <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Modifier</a>
-                                                <a href="#" class="btn btn-sm btn-outline-danger btn-supprimer">Supprimer</a>
-                                            </td>
-                                        </tr>
-
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+                       
+                       
+                            <table id="myTable" class="table table-striped table-bordered table-hover" style="width:100%">
+                                <thead class="table-light"> 
                                     <tr>
-                                        <td colspan="7" class="text-center">Aucun paiement trouvé</td>
+                                        <th>Montant</th>
+                                        <th>Type</th>
+                                        <th>Commentaire</th>
+                                        <th>Vendeur</th>
+                                        <th>Heure</th>
+                                        <th>Contrôle</th>
                                     </tr>
-                                <?php endif; ?>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($paiements)): ?>
+                                        <?php foreach ($paiements as $p): ?>
+                                            <tr data-id="<?= $p['id'] ?>">
+                                                <td><?= htmlspecialchars($p['montant']) ?></td>
+                                                <td><?= htmlspecialchars($p['type_service']) ?></td>
+                                                <td><?= htmlspecialchars($p['commentaire']) ?></td>
+                                                <td><?= htmlspecialchars($p['nom_vendeur']) ?></td>
+                                                <td><?= htmlspecialchars($p['date_heure_paiement']) ?></td>
+                                                <td>
+                                                    <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Modifier</a>
+                                                    <a href="#" class="btn btn-sm btn-outline-danger btn-supprimer">Supprimer</a>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="6" class="text-center">Aucun paiement trouvé</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <th colspan="5" class="text-end">TOTAL VERSEMENT :</th>
+                                        <th id="totalCell">0 Ar</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
 
-                            </tbody>
-                        </table>
+
                             <script>
                                 $(document).ready(function () {
                                     $('#myTable').DataTable({
@@ -97,30 +102,91 @@
 
 
                     <!--Choix type de service-->
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-check form-check-inline">
+                   
+                    <div class="container mt-3">
+                        <div class="row">
+                            <!-- Colonne 1 : Poste + Wifi/Cable -->
+                            <div class="col-md-4">
+                            <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="posteCheck">
                                 <label class="form-check-label" for="posteCheck">Poste</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="impressionCheck">
-                                <label class="form-check-label" for="impressionCheck">Impression/Photocopie</label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="Wifi-CableCheck">
+                                <label class="form-check-label" for="Wifi-CableCheck">Wifi/Cable</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="wifiCheck">
-                                <label class="form-check-label" for="wifiCheck">Wifi</label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="filmCheck">
-                                <label class="form-check-label" for="filmCheck">Film</label>
+
+                            <!-- Colonne 2 : Impression/Photocopie + Plastification + Reliure + Marchandise + Email -->
+                            <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="Impression-PhotocopieCheck">
+                                <label class="form-check-label" for="Impression-PhotocopieCheck">
+                                Impression/Photocopie/scan (manasa sary ...)
+                                </label>
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" id="autreCheck">
-                                <label class="form-check-label" for="autreCheck">Autre</label>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="PlastificationCheck">
+                                <label class="form-check-label" for="PlastificationCheck">Plastification</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ReliureCheck">
+                                <label class="form-check-label" for="ReliureCheck">Reliure</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="MarchandiseCheck">
+                                <label class="form-check-label" for="MarchandiseCheck">
+                                Marchandise (Envellope ...)
+                                </label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="EmailCheck">
+                                <label class="form-check-label" for="EmailCheck">Email (Envoi/reçois)</label>
+                            </div>
+                            </div>
+
+                            <!-- Colonne 3 : Film + Saisie + Application + Mise à jour + Installation systeme + Autre -->
+                            <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="FilmCheck">
+                                <label class="form-check-label" for="FilmCheck">Film</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="SaisieCheck">
+                                <label class="form-check-label" for="SaisieCheck">Saisie</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ApplicationCheck">
+                                <label class="form-check-label" for="ApplicationCheck">Application</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="Mise-a-jourCheck">
+                                <label class="form-check-label" for="Mise-a-jourCheck">Mise a jour</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="Installation-systemeCheck">
+                                <label class="form-check-label" for="Installation-systemeCheck">Installation systeme</label>
+                            </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="AutreCheck">
+                                <label class="form-check-label" for="AutreCheck">Autre</label>
+                            </div>
                             </div>
                         </div>
                     </div>
+
+
+
 
                     <!-- Tableau des montants -->
                                         
@@ -177,7 +243,11 @@
             
           <div class="col">
             <div class="d-flex align-items-center justify-content-between">
-                <!-- Boîte d'alerte -->
+                <button id="btnTotal" class="px-4">
+                        <h2>TOTAL VERSEMENT : 0 Ar</h2>
+                </button>
+            <!-- Boîte d'alerte -->
+                
                 <div id="alertBox" class="me-3 flex-grow-1">
                 <!-- Message d'alerte ici -->
                 </div>
@@ -201,10 +271,20 @@
             // Récupérer tous les checkbox cochés et joindre les valeurs par virgule
             let services = [];
             if (document.getElementById('posteCheck').checked) services.push('Poste');
-            if (document.getElementById('impressionCheck').checked) services.push('Impression/Photocopie');
-            if (document.getElementById('wifiCheck').checked) services.push('Wifi');
-            if (document.getElementById('filmCheck').checked) services.push('Film');
-            if (document.getElementById('autreCheck').checked) services.push('Autre');
+            if (document.getElementById('Wifi-CableCheck').checked) services.push('Wifi/Cable');
+
+            if (document.getElementById('Impression-PhotocopieCheck').checked) services.push('Impression-Photocopie-scan');
+            if (document.getElementById('ReliureCheck').checked) services.push('Reliure');
+            if (document.getElementById('PlastificationCheck').checked) services.push('Plastification');
+            if (document.getElementById('MarchandiseCheck').checked) services.push('Marchandise ');
+            if (document.getElementById('EmailCheck').checked) services.push('Email');
+            if (document.getElementById('FilmCheck').checked) services.push('Film');
+            if (document.getElementById('SaisieCheck').checked) services.push('Saisie');
+            if (document.getElementById('ApplicationCheck').checked) services.push('Application');
+            if (document.getElementById('Mise-a-jourCheck').checked) services.push('Mise a jour');
+            if (document.getElementById('Installation-systemeCheck').checked) services.push('Installation systeme');
+            if (document.getElementById('AutreCheck').checked) services.push('Autre');
+            
 
             let type_service = services.join(', ');
 
@@ -257,7 +337,7 @@
                         setTimeout(() => {
                             $('.alert').alert('close');
                         }, 2000);
-
+                        
                         loadTotal(); // Met à jour immédiatement le total
 
                     } else {
@@ -344,12 +424,25 @@
           <div class="mb-3">
             <label for="modifTypeService" class="form-label">Type de service</label>
               <select class="form-select" id="modifTypeService" name="modifTypeService" required>
-                <option value="Poste">Poste</option>
-                <option value="Impression/Photocopie">Impression/Photocopie</option>
-                <option value="Wifi">Wifi</option>
-                <option value="Film">Film</option>
-                <option value="SurveillaAutrence">Autre</option>
-              </select>
+                    <!-- Colonne 1 -->
+                    <option value="Poste">Poste</option>
+                    <option value="Wifi/Cable">Wifi/Cable</option>
+
+                    <!-- Colonne 2 -->
+                    <option value="Impression/Photocopie/scan">Impression/Photocopie/scan (manasa sary ...)</option>
+                    <option value="Plastification">Plastification</option>
+                    <option value="Reliure">Reliure</option>
+                    <option value="Marchandise">Marchandise (Envellope ...)</option>
+                    <option value="Email">Email (Envoi/reçois)</option>
+
+                    <!-- Colonne 3 -->
+                    <option value="Film">Film</option>
+                    <option value="Saisie">Saisie</option>
+                    <option value="Application">Application</option>
+                    <option value="Mise a jour">Mise a jour</option>
+                    <option value="Installation systeme">Installation systeme</option>
+                    <option value="Autre">Autre</option>
+                </select>
           </div>
           <div class="mb-3">
             <label>Commentaire</label>
