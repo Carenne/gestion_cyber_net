@@ -150,10 +150,12 @@ require __DIR__ . '/../inc/db.php';
                 $pointVente = htmlspecialchars($pv);
 
                 $stmt = $pdo->prepare("
-                    SELECT * 
-                    FROM bonus 
-                    WHERE nom_point_vente = :pointVente
-                    ORDER BY date_enregistrement DESC
+                      SELECT * 
+                        FROM bonus 
+                        WHERE nom_point_vente = :pointVente
+                        AND MONTH(date_enregistrement) = MONTH(CURDATE())
+                        AND YEAR(date_enregistrement) = YEAR(CURDATE())
+                        ORDER BY date_enregistrement DESC
                 ");
 
                 $stmt->execute(['pointVente' => $pointVente]);
