@@ -113,7 +113,7 @@ require __DIR__ . '/../inc/db.php';
                     </li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
-                        <a class="dropdown-item" href="settings.php">
+                        <a class="dropdown-item" href="bonus.php">
                             <i class="bi bi-gear"></i> Gestion de Bonus
                         </a>
                     </li>

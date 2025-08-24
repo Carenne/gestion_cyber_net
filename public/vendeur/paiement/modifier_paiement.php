@@ -15,6 +15,28 @@ $type_service = $_POST['type_service'] ?? null;
 $commentaire = $_POST['commentaire'] ?? '';
 $justification = trim($_POST['justification'] ?? '');
 
+ // 1. Déterminer le taux de bonus
+    $taux_bonus = 0;
+    switch ($type_service) {
+        case 'Film':
+        case 'Saisie':
+        case 'Mise a jour':
+        case 'Installation systeme':
+        case 'Autre':
+            $taux_bonus = 0.3333;
+            break;
+        case 'Application':
+            $taux_bonus = 0.5;
+            break;
+        default:
+            $taux_bonus = 0;
+            break;
+    }
+
+    // 2. Calculer bonus et versement_pure
+    $montant_bonus = round($montant * $taux_bonus);
+    $versement_pure = $montant - $montant_bonus;
+
 if (!$id || !$montant || !$type_service || $justification === '') {
     echo json_encode(['success' => false, 'message' => 'Champs manquants']);
     exit;
@@ -35,8 +57,8 @@ $insert = $pdo->prepare("
     INSERT INTO paiement_modification
     (paiement_id, ancien_montant, ancien_type_service, ancien_commentaire, 
      nouveau_montant, nouveau_type_service, nouveau_commentaire,
-     nom_vendeur, nom_point_vente, justification)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+     nom_vendeur, nom_point_vente, versement_pure, justification)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ");
 
 $insert->execute([
@@ -49,11 +71,12 @@ $insert->execute([
     $commentaire,
     $_SESSION['user']['username'],
     $_SESSION['user']['point_of_sale'],
+    $versement_pure,
     $justification
 ]);
 
 // Mettre à jour le paiement
-$update = $pdo->prepare("UPDATE paiement SET montant=?, type_service=?, commentaire=? WHERE id=?");
-$update->execute([$montant, $type_service, $commentaire, $id]);
+$update = $pdo->prepare("UPDATE paiement SET montant=?, type_service=?, commentaire=?, versement_pure=? WHERE id=?");
+$update->execute([$montant, $type_service, $commentaire, $versement_pure, $id]);
 
 echo json_encode(['success' => true]);

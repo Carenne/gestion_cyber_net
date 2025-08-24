@@ -1,3 +1,4 @@
+minuteur
 CREATE TABLE wifi ( id INT AUTO_INCREMENT PRIMARY KEY, heure_demarrage TIME NOT NULL, heure_fin TIME NOT NULL, temps INT NOT NULL, -- durée en minutes (ou heures) prix DECIMAL(10,2) NOT NULL, montant_limite DECIMAL(10,2) DEFAULT NULL, commentaire VARCHAR(255) DEFAULT NULL, date_enregistrement DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, lieu_travail VARCHAR(100) NOT NULL, nom_gerant VARCHAR(100) NOT NULL );
 
 DROP EVENT IF EXISTS increment_wifi;
@@ -59,3 +60,61 @@ Mouvement d'argent
     nivoka
     font de caisse
     trosa
+
+
+
+
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_insert_paiement
+AFTER INSERT ON paiement
+FOR EACH ROW
+BEGIN
+    DECLARE montant_bonus INT;
+
+    -- calcul du bonus
+    SET montant_bonus = NEW.montant - NEW.versement_pure;
+
+    -- insertion dans la table bonus
+    INSERT INTO bonus (id_paiement, montant_bonus, nom_point_vente)
+    VALUES (NEW.id, montant_bonus, NEW.nom_point_vente);
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_update_paiement
+AFTER UPDATE ON paiement
+FOR EACH ROW
+BEGIN
+    DECLARE montant_bonus INT;
+
+    -- recalcul du bonus
+    SET montant_bonus = NEW.montant - NEW.versement_pure;
+
+    -- mise à jour du bonus lié à ce paiement
+    UPDATE bonus
+    SET montant_bonus = montant_bonus,
+        date_enregistrement = NOW(),
+        nom_point_vente = NEW.nom_point_vente
+    WHERE id_paiement = NEW.id;
+END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_delete_paiement
+AFTER DELETE ON paiement
+FOR EACH ROW
+BEGIN
+    -- suppression du bonus lié à ce paiement
+    DELETE FROM bonus WHERE id_paiement = OLD.id;
+END$$
+
+DELIMITER ;

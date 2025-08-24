@@ -141,19 +141,84 @@ require __DIR__ . '/../inc/db.php';
     <div class="container w-75 mt-4">
       <!-- Boutons onglets -->
       <div class="d-flex">
-          <button class="tab-btn active" data-tab="mvn">MOUVEMENT ARGENT</button>
+          <button class="tab-btn active" data-tab="mvn">GESTION DE BONUS</button>
    
       </div>
 
       <div id="mvn" class="content-section active">
-            <P>TOTAL ARGENT RECU (versement et bonus)</p>
-          <P>VERSEMENT PURE SANS BONUS</p>
-          <P>TOTAL BONUS</p>
-          <P>TOTAL ARGENT SORTIE</p>
-          <P>TOTAL TROSA NON RECU</p>
-          <P>TOTAL PAIEMENT PAR MVOLA</p>
-          <P>TOTAL ARGENT BRUTE PRESENT</p>
-          <P>CRUD ARGENT SORTI, TROSA, PAYEMENT PAR MVOLA</p>
+          <?php
+                $pointVente = htmlspecialchars($pv);
+
+                $stmt = $pdo->prepare("
+                    SELECT * 
+                    FROM bonus 
+                    WHERE nom_point_vente = :pointVente
+                    ORDER BY date_enregistrement DESC
+                ");
+
+                $stmt->execute(['pointVente' => $pointVente]);
+                $paiements = $stmt->fetchAll();
+
+                /*  Calculer la somme des bonus */
+                $totalBonus = array_sum(array_column($paiements, 'montant_bonus'));
+            ?>
+
+            <!-- Liste des paiements -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Liste des paiements</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                       
+                       
+                            <table id="myTableb" class="table table-striped table-bordered table-hover" style="width:100%">
+                                <thead class="table-light"> 
+                                    <tr>
+                                        <th>Montant</th>
+                                        <th>Id paiement</th>
+                                        <th>Date enregistrement</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if (!empty($paiements)): ?>
+                                        <?php foreach ($paiements as $p): ?>
+                                            <tr data-id="<?= $p['id'] ?>">
+                                                <td><?= htmlspecialchars($p['montant_bonus']) ?></td>
+                                                <td><?= htmlspecialchars($p['id_paiement']) ?></td>
+                                                <td><?= htmlspecialchars($p['date_enregistrement']) ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else: ?>
+                                        <tr>
+                                            <td colspan="6" class="text-center">Aucun BONUS trouvé</td>
+                                        </tr>
+                                    <?php endif; ?>
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <th colspan="5" class="text-end">
+                                            TOTAL BONUS : <p id="totalCell"><?= number_format($totalBonus, 0, ',', ' ') ?> Ar</p>
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+
+
+                            <script>
+                                /*$(document).ready(function () {
+                                    $('#myTableb').DataTable({
+                                        "pageLength": 5, // Par défaut 5 lignes par page
+                                        "lengthMenu": [5, 10, 25, 50, 100], // Choix possible
+                                        "language": {
+                                            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json"
+                                        }
+                                    });
+                                });*/
+                            </script>
+                    </div>
+                </div>
+            </div>
       </div>
     </div>
 

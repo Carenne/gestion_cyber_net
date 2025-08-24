@@ -38,12 +38,36 @@ if ($montant <= 0 || empty($type_service)) {
     exit;
 }
 
+ // 1. Déterminer le taux de bonus
+    $taux_bonus = 0;
+    switch ($type_service) {
+        case 'Film':
+        case 'Saisie':
+        case 'Mise a jour':
+        case 'Installation systeme':
+        case 'Autre':
+            $taux_bonus = 0.3333;
+            break;
+        case 'Application':
+            $taux_bonus = 0.5;
+            break;
+        default:
+            $taux_bonus = 0;
+            break;
+    }
+
+    // 2. Calculer bonus et versement_pure
+    $montant_bonus = round($montant * $taux_bonus);
+    $versement_pure = $montant - $montant_bonus;
+
 // Insertion
-$stmt = $pdo->prepare("INSERT INTO paiement (montant, type_service, commentaire, nom_vendeur, nom_point_vente) VALUES (?, ?, ?, ?, ?)");
-$stmt->execute([$montant, $type_service, $commentaire, $nom_vendeur, $nom_point_vente]);
+$stmt = $pdo->prepare("INSERT INTO paiement (montant, type_service, commentaire, nom_vendeur, nom_point_vente, versement_pure) VALUES (?, ?, ?, ?, ?, ?)");
+$stmt->execute([$montant, $type_service, $commentaire, $nom_vendeur, $nom_point_vente, $versement_pure]);
 
 // Récupérer le dernier enregistrement inséré pour l’afficher
 $id = $pdo->lastInsertId();
 $newRow = $pdo->query("SELECT * FROM paiement WHERE id = $id")->fetch();
+
+
 
 echo json_encode(['status' => 'success', 'data' => $newRow]);

@@ -33,12 +33,13 @@ try {
         echo json_encode(["success" => false, "message" => "Paiement introuvable"]);
         exit;
     }
+    
 
     // Insérer dans paiement_suppression
     $insert = $pdo->prepare("
         INSERT INTO paiement_suppression 
-        (paiement_id, montant, type_service, commentaire, nom_vendeur, nom_point_vente, date_heure_paiement, cause, date_suppression)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
+        (paiement_id, montant, type_service, commentaire, nom_vendeur, nom_point_vente, date_heure_paiement, cause, versement_pure, date_suppression)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
     ");
     $insert->execute([
         $paiement['id'],
@@ -48,7 +49,8 @@ try {
         $paiement['nom_vendeur'],
         $paiement['nom_point_vente'],
         $paiement['date_heure_paiement'],
-        $cause
+        $cause,
+        $paiement['versement_pure']
     ]);
 
     // Supprimer le paiement original
