@@ -26,6 +26,7 @@ require __DIR__ . '/../inc/db.php';
     <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icons.min.css">
     <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
     <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+     
     <!-- End plugin css for this page -->
     <!-- inject:css -->
     <!-- endinject -->
@@ -260,14 +261,14 @@ require __DIR__ . '/../inc/db.php';
               <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                       <?php include 'admin/paiement_encours_mini.php'; ?>
+                       <?php include 'admin/paiement-encours/paiement_encours_mini.php'; ?>
                   </div>
                 </div>
               </div>
               <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                       <?php include 'admin/paiement_encours_tok.php'; ?>
+                       <?php include 'admin/paiement-encours/paiement_encours_tok.php'; ?>
                   </div>
                 </div>
               </div>
@@ -306,5 +307,64 @@ require __DIR__ . '/../inc/db.php';
     <script src="assets/js/proBanner.js"></script>
     <script src="assets/js/dashboard.js"></script>
     <!-- End custom js for this page -->
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+                <script>
+                    function chargerPaiements() {
+                        $.get("admin/paiement-encours/get_paiements.php", function(data) { 
+                            let paiements = JSON.parse(data);
+                            let rows = "";
+
+                            if (paiements.length > 0) {
+                                
+                                paiements.forEach(p => {
+                                    rows += `
+                                        <tr data-id="${p.id}">
+                                            <td>${p.montant}</td>
+                                            <td>${p.type_service}</td>
+                                            <td>${p.commentaire}</td>
+                                            <td>${p.nom_vendeur}</td>
+                                            <td>${p.date_heure_paiement}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Réclamer</a><br>
+                                                <a href="#" class="btn btn-sm btn-outline-danger btn-valider">Valider</a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }); 
+                            } else {
+                                
+                                rows = `<tr><td colspan="6" class="text-center">Aucun paiement trouvé</td></tr>`;
+                            }
+                            
+                            $("#paiementBody").html(rows);
+                            
+                        });
+                    }
+
+                    // Charger toutes les 2 secondes
+                    setInterval(chargerPaiements, 2000);
+                    chargerPaiements(); // premier chargement
+
+                    // Validation d’un paiement
+                    $(document).on("click", ".btn-valider", function(e) {
+                        e.preventDefault();
+                        let row = $(this).closest("tr");
+                        let id = row.data("id");
+
+                        $.post("admin/paiement-encours/valider_paiement.php", {id: id}, function(response) {
+                            let res = JSON.parse(response);
+                            if (res.success) {
+                                row.fadeOut(500, function() { $(this).remove(); });
+                            } else {
+                                alert("Erreur lors de la validation.");
+                            }
+                        });
+                    });
+            </script>
+
   </body>
 </html>
