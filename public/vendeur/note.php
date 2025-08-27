@@ -97,16 +97,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="commentaire" class="form-label">Commentaire</label>
-                        <textarea class="form-control" id="commentaire" name="commentaire" rows="4" placeholder="Saisissez votre commentaire ici..."></textarea>
+                        <textarea class="form-control" rows="1" id="commentaire" name="commentaire" rows="4" placeholder="Saisissez votre commentaire ici..."></textarea>
                     </div>
 
-
-                    <!--Choix type de service-->
-                   
-                    <div class="container mt-3">
+                    <div id="customAlert" class="alert alert-danger fw-bold fs-4 d-none" role="alert">
+                    Misafidiana service ray, de hoantrinona ny vola.
+                    </div>
+                                        <!--Choix type de service-->
+                        <div class="container mt-3">
                         <div class="row">
-                            <!-- Colonne 1 : Poste + Wifi/Cable -->
-                            <div class="col-md-4">
+                            <!-- Colonne 1 -->
+                            <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="posteCheck">
                                 <label class="form-check-label" for="posteCheck">Poste</label>
@@ -116,10 +117,19 @@
                                 <input class="form-check-input" type="checkbox" id="Wifi-CableCheck">
                                 <label class="form-check-label" for="Wifi-CableCheck">Wifi/Cable</label>
                             </div>
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="MarchandiseCheck">
+                                <label class="form-check-label" for="MarchandiseCheck">Marchandise (Envellope ...)</label>
+                            </div>
+                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ReliureCheck">
+                                <label class="form-check-label" for="ReliureCheck">Reliure</label>
+                            </div>
                             </div>
 
-                            <!-- Colonne 2 : Impression/Photocopie + Plastification + Reliure + Marchandise + Email -->
-                            <div class="col-md-4">
+                            <!-- Colonne 2 -->
+                            <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Impression-PhotocopieCheck">
                                 <label class="form-check-label" for="Impression-PhotocopieCheck">
@@ -131,27 +141,18 @@
                                 <input class="form-check-input" type="checkbox" id="PlastificationCheck">
                                 <label class="form-check-label" for="PlastificationCheck">Plastification</label>
                             </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="ReliureCheck">
-                                <label class="form-check-label" for="ReliureCheck">Reliure</label>
-                            </div>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="MarchandiseCheck">
-                                <label class="form-check-label" for="MarchandiseCheck">
-                                Marchandise (Envellope ...)
-                                </label>
-                            </div>
-
-                            <div class="form-check">
+                            
+                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="EmailCheck">
                                 <label class="form-check-label" for="EmailCheck">Email (Envoi/reçois)</label>
                             </div>
+                           
+
+                            
                             </div>
 
-                            <!-- Colonne 3 : Film + Saisie + Application + Mise à jour + Installation systeme + Autre -->
-                            <div class="col-md-4">
+                            <!-- Colonne 3 -->
+                            <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="FilmCheck">
                                 <label class="form-check-label" for="FilmCheck">Film</label>
@@ -166,15 +167,18 @@
                                 <input class="form-check-input" type="checkbox" id="ApplicationCheck">
                                 <label class="form-check-label" for="ApplicationCheck">Application</label>
                             </div>
+                            </div>
 
+                            <!-- Colonne 4 -->
+                            <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Mise-a-jourCheck">
-                                <label class="form-check-label" for="Mise-a-jourCheck">Mise a jour</label>
+                                <label class="form-check-label" for="Mise-a-jourCheck">Mise à jour</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Installation-systemeCheck">
-                                <label class="form-check-label" for="Installation-systemeCheck">Installation systeme</label>
+                                <label class="form-check-label" for="Installation-systemeCheck">Installation système</label>
                             </div>
 
                             <div class="form-check">
@@ -183,7 +187,8 @@
                             </div>
                             </div>
                         </div>
-                    </div>
+                        </div>
+
 
 
 
@@ -193,35 +198,32 @@
                     <div class="table-responsive">
                         <table class="table table-bordered text-center">
                             <tbody>
-                                <tr>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('300')">300</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('400')">400</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('500')">500</button></td>
-                                </tr>
+                             
                                 <tr>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('7')">7</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('8')">8</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('9')">9</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('600')">600</button></td>
+                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('100')">100</button></td>
                                 </tr>
                                 <tr>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('4')">4</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('5')">5</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('6')">6</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('700')">700</button></td>
+                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
                                 </tr>
                                 <tr>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('1')">1</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('2')">2</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('3')">3</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('900')">900</button></td>
+                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('1000')">1000</button></td>
                                 </tr>
                                 <tr>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('0')">0</button></td>
                                     <td><button class="btn btn-light w-100" onclick="ajouterValeur('00')">00</button></td>
-                                    <td><button class="btn btn-danger w-100" onclick="effacerDernier()">Effacer</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('1800')">1800</button></td>
+                                    <td>
+                                        <button class="btn btn-danger w-100" onclick="effacerDernier()">Effacer</button>
+                                    </td>
+                                    <td><button class="btn btn-primary w-100" id="btnEnregistrer"><i class="bi bi-save me-2"></i>Enregistrer</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -252,10 +254,8 @@
                 <!-- Message d'alerte ici -->
                 </div>
 
-                <!-- Bouton Enregistrer -->
-                <button id="btnEnregistrer" class="btn btn-primary px-4">
-                <i class="bi bi-save me-2"></i>Enregistrer
-                </button>
+           
+                
             </div>
             </div>
             
@@ -264,6 +264,7 @@
          
     <script>
         document.getElementById('btnEnregistrer').addEventListener('click', function () {
+            
             // Récupérer les valeurs du formulaire
             let montant = document.getElementById('montant').value.trim();
             let commentaire = document.getElementById('commentaire').value.trim();
@@ -289,7 +290,8 @@
             let type_service = services.join(', ');
 
             if (montant === '' || services.length === 0) {
-                alert("Veuillez remplir le montant et choisir au moins un service.");
+                //alert("Veuillez remplir le montant et choisir au moins un service.");
+                document.getElementById("customAlert").classList.remove("d-none");
                 return;
             }
 

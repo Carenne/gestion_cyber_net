@@ -27,40 +27,22 @@
                     <div class="table-responsive">
                        
                        
-                            <table id="myTable" class="table table-striped table-bordered table-hover" style="width:100%">
-                                <thead class="table-light"> 
-                                    <tr>
-                                        <th>Montant</th>
-                                        <th>Type</th>
-                                        <th>Commentaire</th>
-                                        <th>Vendeur</th>
-                                        <th>Heure</th>
-                                        <th>Contrôle</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($paiements)): ?>
-                                        <?php foreach ($paiements as $p): ?>
-                                            <tr data-id="<?= $p['id'] ?>">
-                                                <td><?= htmlspecialchars($p['montant']) ?></td>
-                                                <td><?= htmlspecialchars($p['type_service']) ?></td>
-                                                <td><?= htmlspecialchars($p['commentaire']) ?></td>
-                                                <td><?= htmlspecialchars($p['nom_vendeur']) ?></td>
-                                                <td><?= htmlspecialchars($p['date_heure_paiement']) ?></td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Réclamer</a><br>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger btn-supprimer">Valider</a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="6" class="text-center">Aucun paiement trouvé</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-
-                            </table>
+                    
+                        <table id="myTable2" class="table table-striped table-bordered table-hover" style="width:100%">
+                            <thead class="table-light"> 
+                                <tr>
+                                    <th>Montant</th>
+                                    <th>Type</th>
+                                    <th>Commentaire</th>
+                                    <th>Vendeur</th>
+                                    <th>Heure</th>
+                                    <th>Contrôle</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paiementBody2">
+                                <tr><td colspan="6" class="text-center">Chargement...</td></tr>
+                            </tbody>
+                        </table>
 
                     </div>
                 </div>

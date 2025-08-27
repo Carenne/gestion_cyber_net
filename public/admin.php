@@ -366,5 +366,60 @@ require __DIR__ . '/../inc/db.php';
                     });
             </script>
 
+
+             <script>
+                    function chargerPaiements2() {
+                        $.get("admin/paiement-encours/get_paiements2.php", function(data) { 
+                            let paiements2 = JSON.parse(data);
+                            let rows = "";
+
+                            if (paiements2.length > 0) {
+                                
+                                paiements2.forEach(p => {
+                                    rows += `
+                                        <tr data-id="${p.id}">
+                                            <td>${p.montant}</td>
+                                            <td>${p.type_service}</td>
+                                            <td>${p.commentaire}</td>
+                                            <td>${p.nom_vendeur}</td>
+                                            <td>${p.date_heure_paiement}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary btn-modifier2">Réclamer</a><br>
+                                                <a href="#" class="btn btn-sm btn-outline-danger btn-valider2">Valider</a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }); 
+                            } else {
+                                
+                                rows = `<tr><td colspan="6" class="text-center">Aucun paiement trouvé</td></tr>`;
+                            }
+                            
+                            $("#paiementBody2").html(rows);
+                            
+                        });
+                    }
+
+                    // Charger toutes les 2 secondes
+                    setInterval(chargerPaiements2, 2000);
+                    chargerPaiements2(); // premier chargement
+
+                    // Validation d’un paiement
+                    $(document).on("click", ".btn-valider2", function(e) {
+                        e.preventDefault();
+                        let row = $(this).closest("tr");
+                        let id = row.data("id");
+
+                        $.post("admin/paiement-encours/valider_paiement2.php", {id: id}, function(response) {
+                            let res = JSON.parse(response);
+                            if (res.success) {
+                                row.fadeOut(500, function() { $(this).remove(); });
+                            } else {
+                                alert("Erreur lors de la validation.");
+                            }
+                        });
+                    });
+            </script>
+
   </body>
 </html>
