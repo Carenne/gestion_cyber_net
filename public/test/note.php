@@ -1,88 +1,474 @@
 <?php
-
 session_start();
-
-if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'vendeur') {
-    http_response_code(403);
-    echo json_encode(['status' => 'error', 'message' => 'Accès non autorisé']);
-    exit;
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+    $_SESSION['flash'] = 'Accès non autorisé.';
+    header('Location: index.php'); exit;
 }
+$pv = $_GET['pv'] ?? $_SESSION['user']['point_of_sale'];
+require __DIR__ . '/../inc/db.php';
+?>
 
-$DB_HOST = '127.0.0.1';
-$DB_NAME = 'db_cyber';
-$DB_USER = 'root';
-$DB_PASS = 'julio';
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="assets/vendors/ti-icons/css/themify-icons.css">
+    <link rel="stylesheet" href="assets/vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="assets/vendors/font-awesome/css/font-awesome.min.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="assets/vendors/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icons.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+     
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
 
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-];
+    <style>
+      .content-section {
+        display: none;
+      }
+      .content-section.active {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+      <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+          <a class="sidebar-brand brand-logo" href="index.html"><img src="img/logo.png" alt="logo" /></a>
+        </div>
+        <ul class="nav d-flex">
+          <li  class="nav-item profile ">
+            <div class="profile-desc">
+              <div class="profile-pic">
+                <div class="profile-name">
+                  <h5 class="mb-0 font-weight-normal"><?= $pv ?></h5>
+                  <span><?= htmlspecialchars($_SESSION['user']['username']) ?></span>
+                </div>
+              </div>
+              <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a> 
+          </li>
+          <li  class="nav-item nav-category">
+            <span class="nav-link">Navigation</span>
+          </li>
+          <li data-tab="index" class="nav-item menu-items tab-btn active">
+            <a class="nav-link" href="#">
+              <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Tableau de bord</span>
+            </a>
+          </li>
 
-try {
-    $pdo = new PDO("mysql:host=$DB_HOST;dbname=$DB_NAME;charset=utf8mb4", $DB_USER, $DB_PASS, $options);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['status' => 'error', 'message' => 'Erreur connexion DB']);
-    exit;
-}
+          <li data-tab="paiement" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+                 <span class="menu-icon">
+                <i class="mdi mdi-speedometer"></i>
+              </span>
+              <span class="menu-title">Paiement</span>
+            </a>
+          </li>
 
-// Récupération des données POST
-$montant = isset($_POST['montant']) ? intval($_POST['montant']) : 0;
-$type_service = isset($_POST['type_service']) ? trim($_POST['type_service']) : '';
-$commentaire = isset($_POST['commentaire']) && $_POST['commentaire'] !== '' ? trim($_POST['commentaire']) : 'normal';
-$nom_vendeur = $_SESSION['user']['username'] ?? 'Inconnu';
-$nom_point_vente = $_SESSION['user']['point_of_sale'] ?? '';
+          <li data-tab="bonus" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Bonus</span>
+            </a>
+          </li>
 
-if ($montant <= 0 || empty($type_service)) {
-    echo json_encode(['status' => 'error', 'message' => 'Veuillez remplir montant et type_service']);
-    exit;
-}
+          <li data-tab="versement" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Versement</span>
+            </a>
+          </li>
 
-   // 1. Déterminer le taux de bonus
-    $taux_bonus = 0;
-    switch ($type_service) {
-        case 'Film':
-        case 'Saisie':
-        case 'Mise a jour':
-        case 'Installation système':
-        case 'Autre':
-            $taux_bonus = 0.3333;
-            break;
-        case 'Application':
-            $taux_bonus = 0.5;
-            break;
-        default:
-            $taux_bonus = 0;
-            break;
-    }
+          <li data-tab="wifi" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Wifi / Poste</span>
+            </a>
+          </li>
 
-    // 2. Calculer bonus et versement_pure
-    $montant_bonus = round($montant * $taux_bonus);
-    $versement_pure = $montant - $montant_bonus;
+          <li data-tab="message" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Message</span>
+            </a>
+          </li>
 
-// Insertion
-$stmt = $pdo->prepare("INSERT INTO paiement (montant, type_service, commentaire, nom_vendeur, nom_point_vente) VALUES (?, ?, ?, ?, ?, ?)");
-$stmt->execute([$montant, $type_service, $commentaire, $nom_vendeur, $nom_point_vente, $versement_pure]);
+          <li data-tab="notification" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Notification</span>
+            </a>
+          </li>
 
-// Récupérer le dernier enregistrement inséré pour l’afficher
-$id = $pdo1->lastInsertId();
-$newRow = $pdo1->query("SELECT * FROM paiement WHERE id = $id")->fetch();
+          <li data-tab="tarif" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
+              <span class="menu-title">Tarif</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar p-0 fixed-top d-flex flex-row">
+          <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+              <span class="mdi mdi-menu"></span>
+            </button>
+           
+            <ul class="navbar-nav navbar-nav-right">
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="mdi mdi-email"></i>
+                  <span class="count bg-success"></span>
+                </a>
+              </li>
+              <li class="nav-item dropdown border-left">
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
+                  <i class="mdi mdi-bell"></i>
+                  <span class="count bg-danger"></span>
+                </a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
+                  <div class="navbar-profile">
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name"><?= htmlspecialchars($_SESSION['user']['username']) ?></p>
+                    <i class="mdi mdi-menu-down d-none d-sm-block"></i>
+                  </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list" aria-labelledby="profileDropdown">
+                  <h6 class="p-3 mb-0">Profile</h6>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-cog text-success"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Parametre</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="logout.php" class="dropdown-item preview-item">
+                    <div class="preview-thumbnail">
+                      <div class="preview-icon bg-dark rounded-circle">
+                        <i class="mdi mdi-logout text-danger"></i>
+                      </div>
+                    </div>
+                    <div class="preview-item-content">
+                      <p class="preview-subject mb-1">Deconnection</p>
+                    </div>
+                  </a>   
+                </div>
+              </li>
+            </ul> 
+          </div>
+        </nav>
+        <!-- partial -->
+        <div class="main-panel">
+          <div id="index" class="content-wrapper content-section">
+            <div class="row">
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-10">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">150000 Ar (Pure)</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">Mini-croc</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">160000 Ar (Total)</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-10">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">60000 Ar (Pure)</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">80000 Ar (Total)</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">10000 Ar</h3>
+                          <p class="text-danger ms-2 mb-0 font-weight-medium">Mini-croc</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Bonus</h6>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">20000 Ar</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Bonus</h6>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                       <?php include 'admin/paiement-encours/paiement_encours_mini.php'; ?>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                       <?php include 'admin/paiement-encours/paiement_encours_tok.php'; ?>
+                  </div>
+                </div>
+              </div>
+            </div>
 
- // Récupérer l’ID du paiement inséré
-        $id_paiement = $pdo1->lastInsertId();
+               <div class="row">
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                      <div class="d-flex">
+                        <button class="btn btn-primary flex-fill m-1" onclick="sendRing(1)">Paiement non Eregistrer</button>
+                        <button class="btn btn-success flex-fill m-1" onclick="sendRing(2)">Paiement non Valider</button>
+                        <button class="btn btn-warning flex-fill m-1" onclick="sendRing(3)">Verifier la reclamation</button>
+                        <button class="btn btn-danger flex-fill m-1" onclick="sendRing(4)">un paiement a distance</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                      <div class="d-flex">
+                        <button class="btn btn-primary flex-fill m-1">Paiement non Eregistrer</button>
+                        <button class="btn btn-success flex-fill m-1">Paiement non Valider</button>
+                        <button class="btn btn-warning flex-fill m-1">Verifier la reclamation</button>
+                        <button class="btn btn-danger flex-fill m-1">un paiement a distance</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <div id="paiement" class="content-wapper content-section">
+            <p>paiementfdfdfdsfds
+              fdsfsfffdsssssssssssssssssssss
+            </p>
+          </div>
+      </div>
 
-        // 4. Insérer dans la table bonus
-        $stmt2 = $pdo1->prepare("
-            INSERT INTO bonus (id_paiement, montant_bonus, nom_point_vente) 
-            VALUES (:id_paiement, :montant_bonus, :nom_point_vente)
-        ");
-        $stmt2->execute([
-            ':id_paiement' => $id_paiement,
-            ':montant_bonus' => $montant_bonus,
-            ':nom_point_vente' => $nom_point_vente,
-        ]);
+          <script>
 
-        $pdo1->commit();
-        echo "Paiement et bonus enregistrés avec succès.";
+          //pagination
+                const buttons = document.querySelectorAll('.tab-btn');
+                const sections = document.querySelectorAll('.content-section');
 
-echo json_encode(['status' => 'success', 'data' => $newRow]);
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Retirer active de tous les boutons
+                        buttons.forEach(b => b.classList.remove('active'));
+                        // Ajouter active au bouton cliqué
+                        btn.classList.add('active');
+
+                        // Masquer tous les contenus
+                        sections.forEach(sec => sec.classList.remove('active'));
+                        // Afficher le contenu correspondant
+                        document.getElementById(btn.dataset.tab).classList.add('active');
+                    });
+                });
+          //Fin pagination
+
+            function sendRing(num) {
+              fetch("admin/set_ring.php", {
+                method: "POST",
+                body: new URLSearchParams({ring: num}),
+                headers: {"Content-Type": "application/x-www-form-urlencoded"}
+              }).then(res => res.json())
+                .then(data => console.log("Sonnerie envoyée", data));
+            }
+          </script>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          <footer class="footer">
+           
+          </footer>
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="assets/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="assets/vendors/chart.js/chart.umd.js"></script>
+    <script src="assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <script src="assets/js/jquery.cookie.js" type="text/javascript"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="assets/js/off-canvas.js"></script>
+    <script src="assets/js/misc.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="assets/js/proBanner.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+                <script>
+                    function chargerPaiements() {
+                        $.get("admin/paiement-encours/get_paiements.php", function(data) { 
+                            let paiements = JSON.parse(data);
+                            let rows = "";
+
+                            if (paiements.length > 0) {
+                                
+                                paiements.forEach(p => {
+                                    rows += `
+                                        <tr data-id="${p.id}">
+                                            <td>${p.montant}</td>
+                                            <td>${p.type_service}</td>
+                                            <td>${p.commentaire}</td>
+                                            <td>${p.nom_vendeur}</td>
+                                            <td>${p.date_heure_paiement}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Réclamer</a><br>
+                                                <a href="#" class="btn btn-sm btn-outline-danger btn-valider">Valider</a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }); 
+                            } else {
+                                
+                                rows = `<tr><td colspan="6" class="text-center">Aucun paiement trouvé</td></tr>`;
+                            }
+                            
+                            $("#paiementBody").html(rows);
+                            
+                        });
+                    }
+
+                    // Charger toutes les 2 secondes
+                    setInterval(chargerPaiements, 2000);
+                    chargerPaiements(); // premier chargement
+
+                    // Validation d’un paiement
+                    $(document).on("click", ".btn-valider", function(e) {
+                        e.preventDefault();
+                        let row = $(this).closest("tr");
+                        let id = row.data("id");
+
+                        $.post("admin/paiement-encours/valider_paiement.php", {id: id}, function(response) {
+                            let res = JSON.parse(response);
+                            if (res.success) {
+                                row.fadeOut(500, function() { $(this).remove(); });
+                            } else {
+                                alert("Erreur lors de la validation.");
+                            }
+                        });
+                    });
+            </script>
+
+
+             <script>
+                    function chargerPaiements2() {
+                        $.get("admin/paiement-encours/get_paiements2.php", function(data) { 
+                            let paiements2 = JSON.parse(data);
+                            let rows = "";
+
+                            if (paiements2.length > 0) {
+                                
+                                paiements2.forEach(p => {
+                                    rows += `
+                                        <tr data-id="${p.id}">
+                                            <td>${p.montant}</td>
+                                            <td>${p.type_service}</td>
+                                            <td>${p.commentaire}</td>
+                                            <td>${p.nom_vendeur}</td>
+                                            <td>${p.date_heure_paiement}</td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-outline-primary btn-modifier2">Réclamer</a><br>
+                                                <a href="#" class="btn btn-sm btn-outline-danger btn-valider2">Valider</a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }); 
+                            } else {
+                                
+                                rows = `<tr><td colspan="6" class="text-center">Aucun paiement trouvé</td></tr>`;
+                            }
+                            
+                            $("#paiementBody2").html(rows);
+                            
+                        });
+                    }
+
+                    // Charger toutes les 2 secondes
+                    setInterval(chargerPaiements2, 2000);
+                    chargerPaiements2(); // premier chargement
+
+                    // Validation d’un paiement
+                    $(document).on("click", ".btn-valider2", function(e) {
+                        e.preventDefault();
+                        let row = $(this).closest("tr");
+                        let id = row.data("id");
+
+                        $.post("admin/paiement-encours/valider_paiement2.php", {id: id}, function(response) {
+                            let res = JSON.parse(response);
+                            if (res.success) {
+                                row.fadeOut(500, function() { $(this).remove(); });
+                            } else {
+                                alert("Erreur lors de la validation.");
+                            }
+                        });
+                    });
+            </script>
+
+  </body>
+</html>

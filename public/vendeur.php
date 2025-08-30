@@ -157,7 +157,8 @@ require __DIR__ . '/../inc/db.php';
 
  <script>
 
-        function loadTotal() {
+// reservecccc ******************************/ total versement
+      /*  function loadTotal() {
             $.post("vendeur/paiement/total_paiement.php", { pointVente: "<?= $pointVente ?>" }, function (res) {
                 let total = res.total || 0;
 
@@ -167,7 +168,20 @@ require __DIR__ . '/../inc/db.php';
                 // Met à jour le bouton
                 $('#btnTotal').html("<h2>TOTAL VERSEMENT : " + total.toLocaleString('fr-FR') + " Ar</h2>");
                 }, 'json');
-        }
+        }*/
+
+function loadTotal() {
+    $.post("vendeur/paiement/total_paiement.php", { pointVente: "<?= $pv ?>" }, function (res) {
+        let total = res.total || 0;
+
+      
+            // Si c'est admin, afficher un mot spécial
+            $('#totalCell').text('L\'admin seul peut voir cette total');
+            $('#btnTotal').html("<h2>SPECIAL ADMIN</h2>");
+       
+    }, 'json');
+}
+
 
             $(document).ready(function() {
                 // Charger total dès le départ
@@ -412,6 +426,19 @@ require __DIR__ . '/../inc/db.php';
 
 </script>
     
+<script>
+setInterval(() => {
+  fetch("admin/check_ring.php")
+    .then(res => res.json())
+    .then(data => {
+      if (data.ring > 0) {
+        let audio = new Audio("ring" + data.ring + ".mp3");
+        audio.play();
+      }
+    });
+}, 2000); // vérifie toutes les 2 secondes
+</script>
+
 
        
 

@@ -118,3 +118,12 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+
+
+
+
+
+// decaissement globale
+UPDATE bonus
+SET statut = 'decaissé';

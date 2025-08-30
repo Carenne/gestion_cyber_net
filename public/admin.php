@@ -26,6 +26,13 @@ require __DIR__ . '/../inc/db.php';
     <link rel="stylesheet" href="assets/vendors/flag-icon-css/css/flag-icons.min.css">
     <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.carousel.min.css">
     <link rel="stylesheet" href="assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+
+    <!-- Bootstrap CSS (si pas encore inclus) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
      
     <!-- End plugin css for this page -->
     <!-- inject:css -->
@@ -34,6 +41,15 @@ require __DIR__ . '/../inc/db.php';
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
+
+    <style>
+      .content-section {
+        display: none;
+      }
+      .content-section.active {
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -42,8 +58,8 @@ require __DIR__ . '/../inc/db.php';
         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
           <a class="sidebar-brand brand-logo" href="index.html"><img src="img/logo.png" alt="logo" /></a>
         </div>
-        <ul class="nav">
-          <li class="nav-item profile">
+        <ul class="nav d-flex">
+          <li  class="nav-item profile ">
             <div class="profile-desc">
               <div class="profile-pic">
                 <div class="profile-name">
@@ -53,81 +69,78 @@ require __DIR__ . '/../inc/db.php';
               </div>
               <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a> 
           </li>
-          <li class="nav-item nav-category">
+          <li  class="nav-item nav-category">
             <span class="nav-link">Navigation</span>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="index.html">
+
+
+          <li data-tab="index" class="nav-item menu-items tab-btn active">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Tableau de bord</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+
+          <li data-tab="paiement" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-laptop"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Paiement</span>
-              <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">paiement_modification</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">paiement_suppression</a></li>
-              </ul>
-            </div>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
+
+          <li data-tab="bonus" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-playlist-play"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Bonus</span>
-              <i class="menu-arrow"></i>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/tables/basic-table.html">
+
+          <li data-tab="versement" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-table-large"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Versement</span>
-              <i class="menu-arrow"></i>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/charts/chartjs.html">
+
+          <li data-tab="wifi" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-chart-bar"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">Wifi/Poste</span>
-              <i class="menu-arrow"></i>
+              <span class="menu-title">Wifi / Poste</span>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/icons/font-awesome.html">
+
+          <li data-tab="message" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-contacts"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Message</span>
-              <i class="menu-arrow"></i>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+
+          <li data-tab="notification" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-security"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Notification</span>
-              <i class="menu-arrow"></i>
             </a>
           </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="docs/documentation.html">
+
+          <li data-tab="tarif" class="nav-item menu-items tab-btn">
+            <a class="nav-link" href="#">
               <span class="menu-icon">
-                <i class="mdi mdi-file-document"></i>
+                <i class="mdi mdi-speedometer"></i>
               </span>
               <span class="menu-title">Tarif</span>
             </a>
@@ -194,86 +207,87 @@ require __DIR__ . '/../inc/db.php';
         </nav>
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="row">
-              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-10">
-                        <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">150000 Ar (Pure)</h3>
-                          <p class="text-success ms-2 mb-0 font-weight-medium">Mini-croc</p>
-                        </div>
-                      </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">160000 Ar (Total)</h6>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-10">
-                        <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">60000 Ar (Pure)</h3>
-                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
-                        </div>
-                      </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">80000 Ar (Total)</h6>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-9">
-                        <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">10000 Ar</h3>
-                          <p class="text-danger ms-2 mb-0 font-weight-medium">Mini-croc</p>
-                        </div>
-                      </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">Bonus</h6>
-                  </div>
-                </div>
-              </div>
-              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-9">
-                        <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">20000 Ar</h3>
-                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
-                        </div>
-                      </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">Bonus</h6>
-                  </div>
-                </div>
-              </div>
+
+            <!-- Tableau de bord -->
+            <div id="index" class="content-wrapper content-section active">
+                 <?php include 'admin/index-tab.php'; ?>
             </div>
-            <div class="row">
-              <div class="col-md-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                       <?php include 'admin/paiement-encours/paiement_encours_mini.php'; ?>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                       <?php include 'admin/paiement-encours/paiement_encours_tok.php'; ?>
-                  </div>
-                </div>
-              </div>
+
+            <!-- Paiement -->
+            <div id="paiement" class="content-wrapper content-section">
+              <h3>Paiement</h3>
+              <p>Contenu paiement</p>
             </div>
-          </div>
+
+            <!-- Bonus -->
+            <div id="bonus" class="content-wrapper content-section">
+              <h4 class="mb-3">Liste des Bonus</h4>
+              <?php include 'admin/bonus_admin.php'; ?>
+            </div>
+
+            <!-- Versement -->
+            <div id="versement" class="content-wrapper content-section">
+              <h3>Versement</h3>
+              <p>Contenu versement</p>
+            </div>
+
+            <!-- Wifi/Poste -->
+            <div id="wifi" class="content-wrapper content-section">
+              <h3>Wifi / Poste</h3>
+              <p>Contenu wifi et poste</p>
+            </div>
+
+            <!-- Message -->
+            <div id="message" class="content-wrapper content-section">
+              <h3>Message</h3>
+              <p>Contenu message</p>
+            </div>
+
+            <!-- Notification -->
+            <div id="notification" class="content-wrapper content-section">
+              <h3>Notification</h3>
+              <p>Contenu notification</p>
+            </div>
+
+            <!-- Tarif -->
+            <div id="tarif" class="content-wrapper content-section">
+              <h3>Tarif</h3>
+              <p>Contenu tarif</p>
+            </div>
+             
+       
+      </div>
+
+          <script>
+
+          //pagination
+                const buttons = document.querySelectorAll('.tab-btn');
+                const sections = document.querySelectorAll('.content-section');
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // Retirer active de tous les boutons
+                        buttons.forEach(b => b.classList.remove('active'));
+                        // Ajouter active au bouton cliqué
+                        btn.classList.add('active');
+
+                        // Masquer tous les contenus
+                        sections.forEach(sec => sec.classList.remove('active'));
+                        // Afficher le contenu correspondant
+                        document.getElementById(btn.dataset.tab).classList.add('active');
+                    });
+                });
+          //Fin pagination
+
+            function sendRing(num) {
+              fetch("admin/set_ring.php", {
+                method: "POST",
+                body: new URLSearchParams({ring: num}),
+                headers: {"Content-Type": "application/x-www-form-urlencoded"}
+              }).then(res => res.json())
+                .then(data => console.log("Sonnerie envoyée", data));
+            }
+          </script>
           <!-- content-wrapper ends -->
           <!-- partial:partials/_footer.html -->
           <footer class="footer">
@@ -420,6 +434,8 @@ require __DIR__ . '/../inc/db.php';
                         });
                     });
             </script>
+
+
 
   </body>
 </html>

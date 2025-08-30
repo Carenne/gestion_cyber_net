@@ -245,9 +245,9 @@
             
           <div class="col">
             <div class="d-flex align-items-center justify-content-between">
-                <button id="btnTotal" class="px-4">
+               <!-- <button id="btnTotal" class="px-4">
                         <h2>TOTAL VERSEMENT : 0 Ar</h2>
-                </button>
+                </button>-->
             <!-- Boîte d'alerte -->
                 
                 <div id="alertBox" class="me-3 flex-grow-1">

@@ -155,6 +155,7 @@ require __DIR__ . '/../inc/db.php';
                         WHERE nom_point_vente = :pointVente
                         AND MONTH(date_enregistrement) = MONTH(CURDATE())
                         AND YEAR(date_enregistrement) = YEAR(CURDATE())
+                        AND statut = 'non decaissé'
                         ORDER BY date_enregistrement DESC
                 ");
 
