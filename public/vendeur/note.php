@@ -18,70 +18,7 @@
                 $paiements = $stmt->fetchAll();
 
             ?>
-            <!-- Liste des paiements -->
-            <div class="card mb-4">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0">Liste des paiements</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                       
-                       
-                            <table id="myTable" class="table table-striped table-bordered table-hover" style="width:100%">
-                                <thead class="table-light"> 
-                                    <tr>
-                                        <th>Montant</th>
-                                        <th>Type</th>
-                                        <th>Commentaire</th>
-                                        <th>Vendeur</th>
-                                        <th>Heure</th>
-                                        <th>Contrôle</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php if (!empty($paiements)): ?>
-                                        <?php foreach ($paiements as $p): ?>
-                                            <tr data-id="<?= $p['id'] ?>">
-                                                <td><?= htmlspecialchars($p['montant']) ?></td>
-                                                <td><?= htmlspecialchars($p['type_service']) ?></td>
-                                                <td><?= htmlspecialchars($p['commentaire']) ?></td>
-                                                <td><?= htmlspecialchars($p['nom_vendeur']) ?></td>
-                                                <td><?= htmlspecialchars($p['date_heure_paiement']) ?></td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-outline-primary btn-modifier">Modifier</a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger btn-supprimer">Supprimer</a>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    <?php else: ?>
-                                        <tr>
-                                            <td colspan="6" class="text-center">Aucun paiement trouvé</td>
-                                        </tr>
-                                    <?php endif; ?>
-                                </tbody>
-                                <tfoot class="table-light">
-                                    <tr>
-                                        <th colspan="5" class="text-end">TOTAL VERSEMENT :</th>
-                                        <th id="totalCell">0 Ar</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-
-
-                            <script>
-                                $(document).ready(function () {
-                                    $('#myTable').DataTable({
-                                        "pageLength": 5, // Par défaut 5 lignes par page
-                                        "lengthMenu": [5, 10, 25, 50, 100], // Choix possible
-                                        "language": {
-                                            "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json"
-                                        }
-                                    });
-                                });
-                            </script>
-                    </div>
-                </div>
-            </div>
+     
 
             <!-- Montant par type -->
             <div class="card mb-4">
@@ -90,21 +27,25 @@
                 </div>
                 <div class="card-body">
 
-                    <!--Motant-->
-                    <div class="mb-3">
-                        <label for="montant" class="form-label">Montant</label>
-                        <input type="text" id="montant" name="montant" class="form-control" readonly>
-                    </div>
-                    <div class="mb-3">
-                        <label for="commentaire" class="form-label">Commentaire</label>
-                        <textarea class="form-control" rows="1" id="commentaire" name="commentaire" rows="4" placeholder="Saisissez votre commentaire ici..."></textarea>
-                    </div>
+                        <div class="row align-items-center">
+                            <!-- Montant -->
+                            <div class="col-md-6">
+                                <label for="montant" class="form-label">Montant</label>
+                                <input type="text" id="montant" name="montant" class="form-control" readonly>
+                            </div>
 
-                    <div id="customAlert" class="alert alert-danger fw-bold fs-4 d-none" role="alert">
-                    Misafidiana service ray, de hoantrinona ny vola.
-                    </div>
+                            <!-- Commentaire -->
+                            <div class="col-md-6">
+                                <label for="commentaire" class="form-label">Commentaire</label>
+                                <textarea class="form-control" rows="1" id="commentaire" name="commentaire" placeholder="Saisissez votre commentaire ici..."></textarea>
+                            </div>
+                        </div>
+                        <div id="alertBox" class="col-12">
+                            <!-- Message d'alerte ici -->
+                        </div>
+  
                                         <!--Choix type de service-->
-                        <div class="container mt-3">
+                        <div class="container-fluid mt-3">
                         <div class="row">
                             <!-- Colonne 1 -->
                             <div class="col-md-3">
@@ -196,37 +137,31 @@
                     <!-- Tableau des montants -->
                                         
                     <div class="table-responsive">
-                        <table class="table table-bordered text-center">
-                            <tbody>
-                             
-                                <tr>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('7')">7</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('8')">8</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('9')">9</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('100')">100</button></td>
-                                </tr>
-                                <tr>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('4')">4</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('5')">5</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('6')">6</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
-                                </tr>
-                                <tr>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('1')">1</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('2')">2</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('3')">3</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('1000')">1000</button></td>
-                                </tr>
-                                <tr>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('0')">0</button></td>
-                                    <td><button class="btn btn-light w-100" onclick="ajouterValeur('00')">00</button></td>
-                                    <td>
-                                        <button class="btn btn-danger w-100" onclick="effacerDernier()">Effacer</button>
-                                    </td>
-                                    <td><button class="btn btn-primary w-100" id="btnEnregistrer"><i class="bi bi-save me-2"></i>Enregistrer</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                            <table class="table table-bordered text-center">
+                                <tbody>
+                                    <tr>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('8')">8</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('9')">9</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('0')">0</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('00')">00</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('000')">000</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('100')">100</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('1000')">1000</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('1')">1</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('2')">2</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('3')">3</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('5')">5</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('6')">6</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('7')">7</button></td>
+                                        <td><button class="btn btn-danger w-100" onclick="effacerDernier()">Effacer</button></td>
+                                        <td><button class="btn btn-primary w-100" id="btnEnregistrer"><i class="bi bi-save me-2"></i>Enregistrer</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                     </div>
 
                     <script>
@@ -249,12 +184,7 @@
                         <h2>TOTAL VERSEMENT : 0 Ar</h2>
                 </button>-->
             <!-- Boîte d'alerte -->
-                
-                <div id="alertBox" class="me-3 flex-grow-1">
-                <!-- Message d'alerte ici -->
-                </div>
 
-           
                 
             </div>
             </div>
@@ -289,11 +219,7 @@
 
             let type_service = services.join(', ');
 
-            if (montant === '' || services.length === 0) {
-                //alert("Veuillez remplir le montant et choisir au moins un service.");
-                document.getElementById("customAlert").classList.remove("d-none");
-                return;
-            }
+     
 
                 // Envoi AJAX
                 $.post("vendeur/paiement/ajouter_paiement.php", {
@@ -331,6 +257,13 @@
                         $('#alertBox').html(`
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 Paiement enregistré avec succès !
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                            </div>
+                        `);
+                         // Afficher message succès
+                        $('#alertBox2').html(`
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                Misafidiana service ray, ary aza hadino ny prix!
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                             </div>
                         `);

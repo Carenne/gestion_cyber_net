@@ -138,17 +138,21 @@ require __DIR__ . '/../inc/db.php';
         </div>
     </div>
     
-    <div class="container w-75 mt-4">
+    <div class="container-fluid px-3 mt-4">
+
       <!-- Boutons onglets -->
       <div class="d-flex">
           <button class="tab-btn active" data-tab="note">NOTE VERSEMENT</button>
-        
+          <button class="tab-btn" data-tab="liste">LISTE PAIEMENT</button>
           <button class="tab-btn" data-tab="wifi">CONTROLE WIFI</button>
       </div>
 
       <!-- Contenus -->
      <?php include 'vendeur/note.php'; ?>
 
+      <div id="liste" class="content-section">
+             <?php include 'vendeur/liste_paiement.php'; ?>
+      </div>
   
       <div id="wifi" class="content-section">
              <?php include 'vendeur/wifi.php'; ?>
