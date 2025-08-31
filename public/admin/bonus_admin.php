@@ -3,6 +3,10 @@
     <button class="btn btn-success filter-btn" data-statut="decaissé">Décaisé</button>
     <button class="btn btn-warning filter-btn" data-statut="non decaissé">Non Décaisé</button>
 </div>
+<button id="deleteZeroBonus" class="btn btn-danger mb-3">
+    Supprimer les montants nuls
+</button>
 
 <!-- Zone où le tableau sera chargé -->
 <div id="bonusContent"></div>
+

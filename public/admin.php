@@ -549,5 +549,21 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+$('#deleteZeroBonus').click(function() {
+    if (confirm("Voulez-vous vraiment supprimer tous les bonus à 0 ?")) {
+        $.post('admin/delete_zero_bonus.php', {}, function(res) {
+            if (res.success) {
+                alert("Les enregistrements ont été supprimés !");
+                location.reload(); // recharge la page pour mettre à jour le tableau
+            } else {
+                alert("Erreur : " + res.error);
+            }
+        }, 'json');
+    }
+});
+</script>
+
+
   </body>
 </html>
