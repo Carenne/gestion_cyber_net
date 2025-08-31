@@ -360,7 +360,7 @@ require __DIR__ . '/../inc/db.php';
                     }
 
                     // Charger toutes les 2 secondes
-                    setInterval(chargerPaiements, 2000);
+                    setInterval(chargerPaiements, 5000);
                     chargerPaiements(); // premier chargement
 
                     // Validation d’un paiement
@@ -415,7 +415,7 @@ require __DIR__ . '/../inc/db.php';
                     }
 
                     // Charger toutes les 2 secondes
-                    setInterval(chargerPaiements2, 2000);
+                    setInterval(chargerPaiements2, 5000);
                     chargerPaiements2(); // premier chargement
 
                     // Validation d’un paiement
@@ -490,12 +490,12 @@ require __DIR__ . '/../inc/db.php';
                       loadTotalTokPure();
                       loadBonusTok();
 
-                      setInterval(loadTotalMini, 2000);
-                      setInterval(loadTotalMiniPure, 2000);
-                      setInterval(loadBonusMin, 2000);
-                      setInterval(loadTotalTok, 2000);
-                      setInterval(loadTotalTokPure, 2000);
-                      setInterval(loadBonusTok, 2000);
+                      setInterval(loadTotalMini, 20000);
+                      setInterval(loadTotalMiniPure, 20000);
+                      setInterval(loadBonusMin, 20000);
+                      setInterval(loadTotalTok, 20000);
+                      setInterval(loadTotalTokPure, 20000);
+                      setInterval(loadBonusTok, 20000);
                   };
        
             </script>
@@ -563,7 +563,23 @@ $('#deleteZeroBonus').click(function() {
     }
 });
 </script>
+<!--sonerie-->
+<script>
+  function sendRing(target, ringfile) {
+    
+    fetch("admin/ring.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "target=" + encodeURIComponent(target) + "&ringfile=" + encodeURIComponent(ringfile)
+    })
+    .then(res => res.text())
+    .then(data => {
+        console.log("Réponse serveur:", data);
+    })
+    .catch(err => console.error("Erreur:", err));
+}
 
+</script>
 
   </body>
 </html>

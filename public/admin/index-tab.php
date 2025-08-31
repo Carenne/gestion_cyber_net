@@ -87,10 +87,10 @@
                 <div class="card">
                   <div class="card-body">
                       <div class="d-flex">
-                        <button class="btn btn-primary flex-fill m-1" onclick="sendRing(1)">Paiement non Eregistrer</button>
-                        <button class="btn btn-success flex-fill m-1" onclick="sendRing(2)">Paiement non Valider</button>
-                        <button class="btn btn-warning flex-fill m-1" onclick="sendRing(3)">Verifier la reclamation</button>
-                        <button class="btn btn-danger flex-fill m-1" onclick="sendRing(4)">un paiement a distance</button>
+                        <button class="btn btn-primary flex-fill m-1" onclick="sendRing('Mini-croc','ring1.mp3')">Paiement non Eregistrer</button>
+                        <button class="btn btn-success flex-fill m-1" onclick="sendRing('Mini-croc','ring2.mp3')">Paiement non Valider</button>
+                        <button class="btn btn-warning flex-fill m-1" onclick="sendRing('Mini-croc','ring3.mp3')">Verifier la reclamation</button>
+                        <button class="btn btn-danger flex-fill m-1" onclick="sendRing('Mini-croc','ring4.mp3')">un paiement a distance</button>
                       </div>
                   </div>
                 </div>
@@ -99,10 +99,10 @@
                 <div class="card">
                   <div class="card-body">
                       <div class="d-flex">
-                        <button class="btn btn-primary flex-fill m-1">Paiement non Eregistrer</button>
-                        <button class="btn btn-success flex-fill m-1">Paiement non Valider</button>
-                        <button class="btn btn-warning flex-fill m-1">Verifier la reclamation</button>
-                        <button class="btn btn-danger flex-fill m-1">un paiement a distance</button>
+                        <button class="btn btn-primary flex-fill m-1" onclick="sendRing('Tok','ring1.mp3')">Paiement non Eregistrer</button>
+                        <button class="btn btn-success flex-fill m-1" onclick="sendRing('Tok','ring2.mp3')">Paiement non Valider</button>
+                        <button class="btn btn-warning flex-fill m-1" onclick="sendRing('Tok','ring3.mp3')">Verifier la reclamation</button>
+                        <button class="btn btn-danger flex-fill m-1" onclick="sendRing('Tok','ring4.mp3')">un paiement a distance</button>
                       </div>
                   </div>
                 </div>

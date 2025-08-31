@@ -23,6 +23,8 @@ require __DIR__ . '/../inc/db.php';
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Espace Vendeur</title>
        
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -91,6 +93,10 @@ require __DIR__ . '/../inc/db.php';
    
 </head>
 <body class="bg-light">
+
+    <audio id="ringtone" preload="auto"></audio>
+
+
     <!-- Barre du haut -->
     <div class="topbar">
        
@@ -437,27 +443,27 @@ function loadTotal() {
 
 
 </script>
-    
-<script>
-setInterval(() => {
-  fetch("admin/check_ring.php")
-    .then(res => res.json())
-    .then(data => {
-      if (data.ring > 0) {
-        let audio = new Audio("ring" + data.ring + ".mp3");
-        audio.play();
-      }
-    });
-}, 2000); // vérifie toutes les 2 secondes
-</script>
-
-
-       
+           
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     
+    <script>
+        function checkRing(){
+            fetch("admin/check_ring.php?user=<?= htmlspecialchars($pv) ?>")
+            .then(r=>r.json())
+            .then(data=>{
+                if(data.ring){
+                    let audio = document.getElementById("ringtone");
+                    audio.src = data.file;
+                    audio.play();
+                }
+            });
+          
+        }
 
+        setInterval(checkRing, 2000);
+    </script>
 
 </body>
 </html>
