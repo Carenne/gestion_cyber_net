@@ -140,23 +140,23 @@
                             <table class="table table-bordered text-center">
                                 <tbody>
                                     <tr>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('8')">8</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('9')">9</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('0')">0</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('00')">00</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('000')">000</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('100')">100</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
-                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('1000')">1000</button></td>
-                                    </tr>
-                                    <tr>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('1')">1</button></td>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('2')">2</button></td>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('3')">3</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('4')">4</button></td>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('5')">5</button></td>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('6')">6</button></td>
                                         <td><button class="btn btn-light w-100" onclick="ajouterValeur('7')">7</button></td>
                                         <td><button class="btn btn-danger w-100" onclick="effacerDernier()">Effacer</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('8')">8</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('9')">9</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('0')">0</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('00')">00</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('100')">100</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('200')">200</button></td>
+                                        <td><button class="btn btn-light w-100" onclick="ajouterValeur('1000')">1000</button></td>
                                         <td><button class="btn btn-primary w-100" id="btnEnregistrer"><i class="bi bi-save me-2"></i>Enregistrer</button></td>
                                     </tr>
                                 </tbody>

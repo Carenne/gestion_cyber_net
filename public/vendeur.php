@@ -2,9 +2,17 @@
 session_start();
 if (empty($_SESSION['user']) || $_SESSION['user']['role'] !== 'vendeur') {
     $_SESSION['flash'] = 'Accès non autorisé.';
-    header('Location: index.php'); exit;
+    header('Location: index.php'); 
+    exit;
 }
+
+// Définir $pv AVANT de l'utiliser
 $pv = $_GET['pv'] ?? $_SESSION['user']['point_of_sale'];
+
+if (htmlspecialchars($pv) == '0') {
+    header('Location: logout.php');
+    exit;
+}
 
 require __DIR__ . '/../inc/db.php';
 ?>
@@ -180,7 +188,7 @@ function loadTotal() {
 
       
             // Si c'est admin, afficher un mot spécial
-            $('#totalCell').text('L\'admin seul peut voir cette total');
+            $('#totalCell').text('L\'admin seul peut voir ce total');
             $('#btnTotal').html("<h2>SPECIAL ADMIN</h2>");
        
     }, 'json');
