@@ -435,7 +435,119 @@ require __DIR__ . '/../inc/db.php';
                     });
             </script>
 
+          <!--total versement--->
+      <script>
+                //Mini
+                  function loadTotalMini() {
+                      $.post("vendeur/paiement/total_paiement.php", { pointVente: "Mini-croc" }, function (res) {
+                          let total = res.total || 0;
+                          $('#TotalMn').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
+                  function loadTotalMiniPure() {
+                      $.post("vendeur/paiement/total_paiement_pure.php", { pointVente: "Mini-croc" }, function (res) {
+                          let total = res.total || 0;
+                          $('#Total_pureMn').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
 
+                  function loadBonusMin() {
+                      $.post("bonus/bonus_data.php", { pointVente: "Mini-croc" }, function(res) {
+                          let total = res.totalBonus || 0;
+                           $('#Total_bonusMn').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
+                  //tok
+                    //Mini
+                  function loadTotalTok() {
+                      $.post("vendeur/paiement/total_paiement.php", { pointVente: "Tok" }, function (res) {
+                          let total = res.total || 0;
+                          $('#TotalTok').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
+                  function loadTotalTokPure() {
+                      $.post("vendeur/paiement/total_paiement_pure.php", { pointVente: "Tok" }, function (res) {
+                          let total = res.total || 0;
+                          $('#Total_pureTok').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
+
+                  function loadBonusTok() {
+                      $.post("bonus/bonus_data.php", { pointVente: "Tok" }, function(res) {
+                          let total = res.totalBonus || 0;
+                           $('#Total_bonusTok').html(total.toLocaleString('fr-FR') + " Ar (Total)");
+                      }, 'json');
+                  }
+           
+                  //Fin Tok
+               
+                  // Au chargement de la page et toutes les 2 secondes
+                  window.onload = function() {
+                      loadTotalMini();
+                      loadTotalMiniPure();
+                      loadBonusMin();
+                      loadTotalTok();
+                      loadTotalTokPure();
+                      loadBonusTok();
+
+                      setInterval(loadTotalMini, 2000);
+                      setInterval(loadTotalMiniPure, 2000);
+                      setInterval(loadBonusMin, 2000);
+                      setInterval(loadTotalTok, 2000);
+                      setInterval(loadTotalTokPure, 2000);
+                      setInterval(loadBonusTok, 2000);
+                  };
+       
+            </script>
+      
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+function loadBonus(statut = "") {
+    $.get('admin/load_bonus.php', {statut: statut}, function(data) {
+        $('#bonusContent').html(data);
+    });
+}
+
+// Charger tous au début
+
+
+// Filtrage au clic
+$('.filter-btn').click(function() {
+    let statut = $(this).data('statut');
+    loadBonus(statut);
+
+    // Mise à jour de la classe active
+    $('.filter-btn').removeClass('active');
+    $(this).addClass('active');
+});
+
+loadBonus();
+
+$(document).ready(function() {
+    // Bouton pour changer le statut
+    $(document).on('click', '.toggleStatutBtn', function(){
+        let id = $(this).data('id');
+        let statut = $(this).data('statut');
+
+        $.ajax({
+            url: 'admin/update_bonus.php',
+            type: 'POST',
+            data: { id: id, statut: statut },
+            success: function(response){
+                let res = JSON.parse(response);
+                if(res.status === 'success'){
+                    // Recharger la table
+                    //$('#bonusTable').DataTable().ajax.reload(null, false); // false = garder la page actuelle
+                    loadBonus('non decaissé');
+                } else {
+                    alert('Erreur lors de la mise à jour');
+                }
+            }
+        });
+    });
+});
+</script>
 
   </body>
 </html>

@@ -1,3 +1,5 @@
+
+
 <div class="row">
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
@@ -5,37 +7,23 @@
                     <div class="row">
                       <div class="col-10">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">150000 Ar (Pure)</h3>
+                          <h3 class="mb-0" id="Total_pureMn">150000 Ar (Pure)</h3>
                           <p class="text-success ms-2 mb-0 font-weight-medium">Mini-croc</p>
                         </div>
                       </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">160000 Ar (Total)</h6>
+                    <h6 class="text-muted font-weight-normal" id="TotalMn">160000 Ar (Total)</h6>
                   </div>
                 </div>
               </div>
-              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-10">
-                        <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">60000 Ar (Pure)</h3>
-                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
-                        </div>
-                      </div>
-                    </div>
-                    <h6 class="text-muted font-weight-normal">80000 Ar (Total)</h6>
-                  </div>
-                </div>
-              </div>
+
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">10000 Ar</h3>
+                          <h3 class="mb-0" id="Total_bonusMn">10000 Ar</h3>
                           <p class="text-danger ms-2 mb-0 font-weight-medium">Mini-croc</p>
                         </div>
                       </div>
@@ -44,13 +32,30 @@
                   </div>
                 </div>
               </div>
+
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-10">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0" id="Total_pureTok">60000 Ar (Pure)</h3>
+                          <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal" id="TotalTok">80000 Ar (Total)</h6>
+                  </div>
+                </div>
+              </div>
+
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">20000 Ar</h3>
+                          <h3 class="mb-0" id="Total_bonusTok">20000 Ar</h3>
                           <p class="text-success ms-2 mb-0 font-weight-medium">Tok</p>
                         </div>
                       </div>
