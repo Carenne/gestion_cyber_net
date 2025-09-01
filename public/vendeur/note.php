@@ -51,21 +51,21 @@
                             <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="posteCheck">
-                                <label class="form-check-label" for="posteCheck">Poste</label>
+                                <label class="form-check-label" for="posteCheck">(P)Poste</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Wifi-CableCheck">
-                                <label class="form-check-label" for="Wifi-CableCheck">Wifi/Cable</label>
+                                <label class="form-check-label" for="Wifi-CableCheck">(W)Wifi/Cable</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="MarchandiseCheck">
-                                <label class="form-check-label" for="MarchandiseCheck">Marchandise (Envellope ...)</label>
+                                <label class="form-check-label" for="MarchandiseCheck">(M)Marchandise (Envellope ...)</label>
                             </div>
                              <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="ReliureCheck">
-                                <label class="form-check-label" for="ReliureCheck">Reliure</label>
+                                <label class="form-check-label" for="ReliureCheck">(R)Reliure</label>
                             </div>
                             </div>
 
@@ -74,18 +74,18 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Impression-PhotocopieCheck">
                                 <label class="form-check-label" for="Impression-PhotocopieCheck">
-                                Impression/Photocopie/scan (manasa sary ...)
+                                (I)Impression/Photocopie/scan (manasa sary ...)
                                 </label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="PlastificationCheck">
-                                <label class="form-check-label" for="PlastificationCheck">Plastification</label>
+                                <label class="form-check-label" for="PlastificationCheck">(L)Plastification</label>
                             </div>
                             
                              <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="EmailCheck">
-                                <label class="form-check-label" for="EmailCheck">Email (Envoi/reçois)</label>
+                                <label class="form-check-label" for="EmailCheck">(E)Email (Envoi/reçois)</label>
                             </div>
                            
 
@@ -96,17 +96,17 @@
                             <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="FilmCheck">
-                                <label class="form-check-label" for="FilmCheck">Film</label>
+                                <label class="form-check-label" for="FilmCheck">(F)Film</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="SaisieCheck">
-                                <label class="form-check-label" for="SaisieCheck">Saisie</label>
+                                <label class="form-check-label" for="SaisieCheck">(S)Saisie</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="ApplicationCheck">
-                                <label class="form-check-label" for="ApplicationCheck">Application</label>
+                                <label class="form-check-label" for="ApplicationCheck">(A)Application</label>
                             </div>
                             </div>
 
@@ -114,20 +114,50 @@
                             <div class="col-md-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Mise-a-jourCheck">
-                                <label class="form-check-label" for="Mise-a-jourCheck">Mise à jour</label>
+                                <label class="form-check-label" for="Mise-a-jourCheck">(J)Mise à jour</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="Installation-systemeCheck">
-                                <label class="form-check-label" for="Installation-systemeCheck">Installation système</label>
+                                <label class="form-check-label" for="Installation-systemeCheck">(N)Installation système</label>
                             </div>
 
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="AutreCheck">
-                                <label class="form-check-label" for="AutreCheck">Autre</label>
+                                <label class="form-check-label" for="AutreCheck">(O)Autre</label>
                             </div>
                             </div>
                         </div>
+                        <script>
+                            document.addEventListener("keydown", function(event) {
+                                let key = event.key.toLowerCase(); // on met en minuscule pour éviter la différence P / p
+
+                                // dictionnaire lettre → id du checkbox
+                                const mapping = {
+                                    "p": "posteCheck",
+                                    "w": "Wifi-CableCheck",
+                                    "m": "MarchandiseCheck",
+                                    "r": "ReliureCheck",
+                                    "i": "Impression-PhotocopieCheck",
+                                    "l": "PlastificationCheck",
+                                    "e": "EmailCheck",
+                                    "f": "FilmCheck",
+                                    "s": "SaisieCheck",
+                                    "a": "ApplicationCheck",
+                                    "j": "Mise-a-jourCheck",
+                                    "n": "Installation-systemeCheck",
+                                    "o": "AutreCheck"
+                                };
+
+                                if (mapping[key]) {
+                                    let checkbox = document.getElementById(mapping[key]);
+                                    if (checkbox) {
+                                        checkbox.checked = !checkbox.checked; // toggle (coche/décoche)
+                                    }
+                                }
+                            });
+                        </script>
+
                         </div>
 
 
@@ -163,6 +193,40 @@
                             </table>
 
                     </div>
+                    <script>
+                        const montantInput = document.getElementById("montant");
+                        const btnEnregistrer = document.getElementById("btnEnregistrer");
+
+                        // Ajouter une valeur dans le champ Montant
+                        function ajouterValeur(val) {
+                            montantInput.value += val;
+                        }
+
+                        // Effacer le dernier caractère
+                        function effacerDernier() {
+                            montantInput.value = montantInput.value.slice(0, -1);
+                        }
+
+                        // Gérer les touches clavier
+                        document.addEventListener("keydown", function(event) {
+                            const key = event.key; // touche appuyée
+
+                            // Si c'est un chiffre (0-9)
+                            if (/^[0-9]$/.test(key)) {
+                                ajouterValeur(key);
+                            }
+
+                            // Si c'est "Backspace" ou "Delete"
+                            if (key === "Backspace" || key === "Delete") {
+                                effacerDernier();
+                            }
+
+                            // Si c'est "Enter"
+                            if (key === "Enter") {
+                                btnEnregistrer.click(); // simule un clic sur le bouton
+                            }
+                        });
+                    </script>
 
                     <script>
                         function ajouterValeur(val) {
